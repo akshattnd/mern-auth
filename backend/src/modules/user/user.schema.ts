@@ -19,5 +19,5 @@ export const loginUserSchema = z
 
 export const changePasswordSchema = z.object({
   oldPassword: z.string().min(8),
-  newPassword: z.string().min(8)
-})
+  newPassword: z.string().min(8),
+});

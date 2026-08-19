@@ -111,40 +111,40 @@ export const changePassword = asyncHandler(async (req, res) => {
   // 1. get user from db
   // 2. compare password with old one
   // 3. if true update the password return success res;
-  const user = await UserModel.findById(req?.user?._id)
+  const user = await UserModel.findById(req?.user?._id);
   if (!user) {
-    throw new ApiError(400, 'User not found');
+    throw new ApiError(400, "User not found");
   }
-  const { data, success, error } = changePasswordSchema.safeParse(req.body)
+  const { data, success, error } = changePasswordSchema.safeParse(req.body);
   if (!success) {
     throw new ApiError(400, error.message);
   }
   const { oldPassword, newPassword } = data;
   const isValid = await bcrypt.compare(oldPassword, user.password);
   if (!isValid) {
-    throw new ApiError(400, 'Password did not match');
+    throw new ApiError(400, "Password did not match");
   }
   user.password = newPassword;
   user.save();
-  res.status(200).json(new ApiResponse(200, null, 'Password updated'))
-})
+  res.status(200).json(new ApiResponse(200, null, "Password updated"));
+});
 export const getMe = asyncHandler(async (req, res) => {
   const user = req.user;
   res.status(200).json(new ApiResponse(200, user));
-})
+});
 export const refreshAccessTokens = asyncHandler(async (req, res) => {
   const oldRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
   if (!oldRefreshToken) throw new ApiError(401, "Unauthorized request");
   const secret = process.env.REFRESH_TOKEN_SECRET;
-  if (!secret) throw new ApiError(500, "Env is not set for refresh token")
+  if (!secret) throw new ApiError(500, "Env is not set for refresh token");
   const decodedToken = jwt.verify(oldRefreshToken, secret) as DecodedToken;
   const user = await UserModel.findById(decodedToken._id);
-  if (!user) throw new ApiError(400, "User doesn't exist")
-  if (user.refreshToken != oldRefreshToken) throw new ApiError(400, 'Invalid refresh Token');
-  const { accessToken, refreshToken } = await generateTokens(user._id)
+  if (!user) throw new ApiError(400, "User doesn't exist");
+  if (user.refreshToken != oldRefreshToken) throw new ApiError(400, "Invalid refresh Token");
+  const { accessToken, refreshToken } = await generateTokens(user._id);
 
   res
     .cookie("accessToken", accessToken, cookieOptions)
     .cookie("refreshToken", refreshToken, cookieOptions)
     .json(new ApiResponse(200, { accessToken, refreshToken }, "Successfully generated new Tokens"));
-})
+});

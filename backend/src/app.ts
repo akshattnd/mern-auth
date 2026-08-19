@@ -5,7 +5,12 @@ import userRouter from "./modules/user/user.routes.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173/",
+  }),
+);
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
