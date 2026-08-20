@@ -1,12 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
+import { promise } from "zod";
 
 // Create instance with Vite env variables
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000, // 10 seconds timeout
   headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    "Content-Type": "application/json",
+    Accept: "application/json",
   },
   withCredentials: true,
 });
@@ -18,4 +19,15 @@ apiClient.interceptors.request.use((config) => {
   }
   return config;
 });
-export { apiClient }
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.error('Unauthorized! Logging out.')
+    }
+    return Promise.reject(error)
+  }
+)
+
+export { apiClient };

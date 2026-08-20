@@ -1,3 +1,6 @@
 export default function SignIn() {
-    return <div>Sign In page</div>
+    return (
+        <div>Sign In form</div>
+
+    );
 }
