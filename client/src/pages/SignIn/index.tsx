@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import { useSignIn } from "../../hooks/user";
 import { useNavigate } from "react-router";
+import { Loading } from "../../components/Loading";
+import { toast } from "react-toastify";
 interface LoginFormData {
   identifier: string;
   password: string;
@@ -26,23 +28,25 @@ export default function SignIn() {
     const isEmail = emailRegex.test(formData.identifier);
     const payload = isEmail
       ? {
-          email: formData.identifier,
-          password: formData.password,
-        }
+        email: formData.identifier,
+        password: formData.password,
+      }
       : {
-          username: formData.identifier,
-          password: formData.password,
-        };
-    console.log("payload", payload);
+        username: formData.identifier,
+        password: formData.password,
+      };
+    // console.log("payload", payload);
     loginMutation.mutate(payload, {
-      onSuccess: ({ data }) => {
-        console.log(data);
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+      onSuccess: (data) => {
+        const { accessToken, refreshToken } = data.data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        toast.success(data.message)
         navigate("/");
       },
       onError: (error) => {
-        console.error(error);
+        // console.error(error);
+        toast.error(error.message)
       },
     });
   };
@@ -75,7 +79,7 @@ export default function SignIn() {
         />
       </div>
 
-      <button type="submit">submit</button>
+      <button type="submit" disabled={loginMutation.isPending}>{loginMutation.isPending ? <Loading /> : <span>Submit</span>}</button>
     </form>
   );
 }

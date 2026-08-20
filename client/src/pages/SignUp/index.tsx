@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import { useSignUp } from "../../hooks/user";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
+import { Loading } from "../../components/Loading";
+import { toast } from "react-toastify";
 interface LoginFormData {
   username: string;
   email: string;
@@ -27,28 +29,19 @@ export default function SignUp() {
     // const isEmail = emailRegex.test(formData.identifier)
 
     registerMutation.mutate(formData, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        toast.success(data.message)
         navigate("/sign-in");
       },
       onError: (error) => {
-        console.error(error);
+        // console.error(error);
+        toast.error(error.message)
       },
     });
   };
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          name="username"
-          type="text"
-          placeholder="Enter username "
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-      </div>
+
       <div>
         <label htmlFor="email">Email</label>
         <input
@@ -61,7 +54,18 @@ export default function SignUp() {
           required
         />
       </div>
-
+      <div>
+        <label htmlFor="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          placeholder="Enter username "
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+      </div>
       <div>
         <label htmlFor="password">Password</label>
 
@@ -77,7 +81,7 @@ export default function SignUp() {
         />
       </div>
 
-      <button type="submit">submit</button>
+      <button type="submit" disabled={registerMutation.isPending}>{registerMutation.isPending ? <Loading /> : <span>Submit</span>} </button>
     </form>
   );
 }
