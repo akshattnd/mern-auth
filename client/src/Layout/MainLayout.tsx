@@ -5,7 +5,6 @@ export function MainLayout() {
   return (
     <div className="min-h-screen">
       <Navbar />
-
       <main>
         <Outlet />
       </main>
