@@ -12,7 +12,7 @@ const router = Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.put("/change-password", authGaurd, changePassword);
-router.get("/logout", authGaurd, logoutUser);
+router.post("/logout", authGaurd, logoutUser);
 router.get("/me", authGaurd, getMe);
 router.post("/refresh-token", refreshAccessTokens);
 

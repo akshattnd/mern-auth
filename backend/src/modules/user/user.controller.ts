@@ -130,7 +130,7 @@ export const changePassword = asyncHandler(async (req, res) => {
 });
 export const getMe = asyncHandler(async (req, res) => {
   const user = req.user;
-  
+
   res.status(200).json(new ApiResponse(200, user));
 });
 export const refreshAccessTokens = asyncHandler(async (req, res) => {

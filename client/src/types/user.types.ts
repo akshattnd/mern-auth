@@ -30,6 +30,11 @@ export type User = {
   email: string;
   isActive: string;
 };
+export type LoginResponse = {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+};
 export type RefreshAccessToken = {
   refreshToken: string;
   accessToken: string;
