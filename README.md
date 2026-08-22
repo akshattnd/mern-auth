@@ -468,8 +468,8 @@ The architecture is intentionally modular so additional authentication and autho
 
 Aspiring Full-Stack Engineer
 
-- GitHub: `<your-github-profile>`
-- LinkedIn: `<your-linkedin-profile>`
+- GitHub: `https://github.com/akshattnd`
+- LinkedIn: `https://www.linkedin.com/in/akshattnd/`
 
 ---
 
